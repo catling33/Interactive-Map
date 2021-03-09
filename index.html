@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style>
-            html,
-            body {
-                font-family: Arial, sans-serif;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-
-            #map {
-                height: 100%;
-            }
-        </style>
+        <link rel="stylesheet" href="index.css">
     </head>
     <body>
+        <div class="container">
+            <div class="options-box">
+                <h1>Find Your New NYC Home</h1>
+                <div>
+                    <input id="show-listings" type="button" value="Show Listings">
+                    <input id="hide-listings" type="button" value="Hide Listings">
+                </div>
+            </div>
+        </div>
         <div id="map"></div>
         <script>
             var map;
@@ -74,30 +71,41 @@
                     // create an onclick event to open an infowindow at each marker
                     marker.addListener('click', function() {
                         populateInfoWindow(this, largeInfowindow);
+                    });
+                }
+                map.fitBounds(bounds);
+                document.getElementById('show-listings').addEventListener('click', showListings);
+                document.getElementById('hide-listings').addEventListener('click', hideListings);
+            }
+            function populateInfoWindow(marker, infowindow) {
+                if (infowindow.marker != marker) {
+                    infowindow.marker = marker;
+                    infowindow.setContent('<div>' + marker.title + '</div>');
+                    infowindow.open(map, marker);
+                    // make sure the marker property is cleared if the infowindow is closed
+                    infowindow.addListener('closeclick', function(){
+                        infowindow.setMarker(null);
                     })
                 }
-
-                function populateInfoWindow(marker, infowindow) {
-                    if (infowindow.marker != marker) {
-                        infowindow.marker = marker;
-                        infowindow.setContent('<div>' + marker.title + '</div>');
-                        infowindow.open(map, marker);
-                        // make sure the marker property is cleared if the infowindow is closed
-                        infowindow.addListener('closeclick', function(){
-                            infowindow.setMarker(null);
-                        })
-
-                    }
+            }
+            function showListings() {
+                var bounds = new google.maps.LatLngBounds();
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(map);
+                    bounds.extend(markers[i].positions);
                 }
-
+                map.fitBounds(bounds);
+            }
+            function hideListings() {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
             }
         </script>
+
         <script async defer
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC71ITh_3ZLZ8FONu8HU_qDAF5X4uVIlu4&v=3&callback=initMap">
         </script>
     </body>
-
-
-
 
 </html>
