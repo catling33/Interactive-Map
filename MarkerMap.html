@@ -21,7 +21,6 @@
 
             // Function to initialize the map within the map div
             function initMap() {
-                const location = {lat: 40.7713024, lng: -73.9632393};
                 const map = new google.maps.Map(document.getElementById('map'), {
                     center: {lat: 40.74135, lng: -73.99802},
                     zoom: 14
@@ -32,7 +31,7 @@
                 // Create it with the position of the singleLatLng,
                 // on the map, and give it your own title!
                 const marker = new google.maps.Marker({
-                    position: location,
+                    position: singleLatLng,
                     map,
                     title: "Park Ave Penthouse",
                 });
@@ -40,7 +39,7 @@
                 // TODO: create a single infowindow, with your own content.
                 // It must appear on the marker
                 const infowindow = new google.maps.InfoWindow({
-                    content: "Best Tea House in the Town!"
+                    content: '' + marker.position
                 })
 
                 // TODO: create an EVENT LISTENER so that the infowindow opens when
